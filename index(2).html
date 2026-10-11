@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Klipp – Kurzvideos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1a1124; --panel:#251934; --panel2:#30213f; --line:#41305a;
+  --text:#f5eefc; --muted:#a898c4; --accent:#ff3d77; --lilac:#b79cff;
+  --nav:68px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font:400 15px/1.45 'DM Sans',system-ui,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+a{color:inherit;text-decoration:none}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+:focus-visible{outline:2px solid var(--lilac);outline-offset:2px}
+
+/* ---------- Layout ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;height:100dvh}
+nav.rail{padding:22px 14px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line);background:var(--bg)}
+.logo{font:800 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-.05em;padding:0 12px 20px}
+.logo i{color:var(--accent);font-style:normal}
+nav.rail a{display:flex;align-items:center;gap:14px;padding:12px;border-radius:14px;color:var(--muted);font-weight:500}
+nav.rail a:hover,nav.rail a.on{color:var(--text);background:var(--panel)}
+nav.rail a.cta{background:var(--accent);color:#fff;margin:6px 0}
+nav.rail a.cta:hover{background:#ff5c8d}
+main#view{position:relative;overflow:hidden;height:100dvh}
+.page{height:100%;overflow-y:auto;padding:32px 28px 48px}
+.narrow{max-width:520px;margin:0 auto}
+h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+h1{font-size:34px;line-height:1.1;font-weight:800}
+.muted{color:var(--muted)}
+
+/* ---------- Buttons / Felder ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700}
+.btn:hover{background:#ff5c8d}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:var(--panel2);color:var(--text)}
+.btn.ghost:hover{background:var(--line)}
+.btn.small{padding:6px 14px;font-size:13px}
+.field{display:flex;flex-direction:column;gap:6px;margin-top:16px}
+.field label{font-weight:500;color:var(--muted);font-size:13px}
+.field input,.field textarea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;width:100%}
+.field input:focus,.field textarea:focus{outline:2px solid var(--lilac);border-color:transparent}
+.field textarea{resize:vertical;min-height:90px}
+.err{color:#ff8fa8;margin-top:14px;min-height:20px;font-size:14px}
+.ok{color:#9be8b4}
+.seg{display:flex;background:var(--panel);border-radius:999px;padding:4px;margin:22px 0 4px}
+.seg button{flex:1;padding:9px;border-radius:999px;font-weight:700;color:var(--muted)}
+.seg button.on{background:var(--panel2);color:var(--text)}
+
+/* ---------- Avatar ---------- */
+.av{--s:36px;width:var(--s);height:var(--s);border-radius:50%;background:var(--lilac);color:#2a1745;display:inline-grid;place-items:center;font:800 calc(var(--s)*.42) 'Bricolage Grotesque',sans-serif;overflow:hidden;flex:none;object-fit:cover}
+
+/* ---------- Feed ---------- */
+.feedwrap{position:relative;height:100%}
+.feed{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
+.feed::-webkit-scrollbar{display:none}
+.clip{height:100%;scroll-snap-align:start;scroll-snap-stop:always;display:flex;justify-content:center;align-items:center;padding:12px 0}
+.frame{position:relative;height:100%;aspect-ratio:9/16;max-width:100%;background:#000;border-radius:24px;overflow:hidden}
+.frame video{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
+.frame video.wide{object-fit:contain}
+.frame::after{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:linear-gradient(transparent,rgba(10,4,16,.78));pointer-events:none}
+.frame::before{content:"";position:absolute;inset:0 0 auto 0;height:90px;background:linear-gradient(rgba(10,4,16,.55),transparent);pointer-events:none;z-index:1}
+.playflag{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .15s;z-index:2}
+.playflag span{width:76px;height:76px;border-radius:50%;background:rgba(20,8,30,.55);display:grid;place-items:center}
+.playflag svg{width:34px;height:34px;fill:#fff;stroke:none}
+.frame.paused .playflag{opacity:1}
+.meta{position:absolute;left:16px;right:84px;bottom:18px;z-index:3;pointer-events:none}
+.meta>*{pointer-events:auto}
+.who{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.who .un{font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.follow{padding:4px 12px;border-radius:999px;border:1.5px solid #fff;font-weight:700;font-size:13px}
+.follow.on{border-color:transparent;background:rgba(255,255,255,.2)}
+.cap{text-shadow:0 1px 6px rgba(0,0,0,.6);overflow-wrap:anywhere;max-height:4.4em;overflow:hidden}
+.rail-actions{position:absolute;right:10px;bottom:18px;display:flex;flex-direction:column;gap:16px;align-items:center;z-index:3}
+.rail-actions button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.rail-actions .ring{width:46px;height:46px;border-radius:50%;background:rgba(30,14,44,.55);display:grid;place-items:center;transition:transform .12s}
+.rail-actions button:active .ring{transform:scale(.88)}
+.rail-actions .on .ring{color:var(--accent)}
+.rail-actions .on svg{fill:var(--accent)}
+.tabs{position:absolute;top:16px;left:0;right:0;display:flex;justify-content:center;gap:22px;z-index:6;pointer-events:none}
+.tabs button{pointer-events:auto;font:800 17px 'Bricolage Grotesque',sans-serif;color:rgba(255,255,255,.6);text-shadow:0 1px 8px rgba(0,0,0,.6);padding:4px 2px;border-bottom:2px solid transparent}
+.tabs button.on{color:#fff;border-color:#fff}
+.mutebtn{position:absolute;top:12px;right:14px;z-index:6;width:42px;height:42px;border-radius:50%;background:rgba(30,14,44,.6);display:grid;place-items:center}
+.empty{height:100%;display:grid;place-items:center;text-align:center;padding:24px}
+.empty div{max-width:340px}
+.empty h2{font-size:26px;margin-bottom:8px}
+.empty .btn{margin-top:18px}
+
+/* ---------- Profil ---------- */
+.phead{display:flex;gap:24px;align-items:center;flex-wrap:wrap;max-width:760px;margin:0 auto 28px}
+.phead .av{--s:104px}
+.pinfo{flex:1;min-width:220px}
+.pinfo h1{font-size:28px}
+.stats{display:flex;gap:22px;margin:10px 0}
+.stats b{font-size:18px;display:block;line-height:1.1}
+.stats span{color:var(--muted);font-size:13px}
+.bio{color:#dccff0;margin-bottom:14px;overflow-wrap:anywhere;white-space:pre-wrap}
+.pbtns{display:flex;gap:10px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;max-width:760px;margin:0 auto}
+.thumb{position:relative;aspect-ratio:9/14;background:var(--panel);border-radius:12px;overflow:hidden}
+.thumb video{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.thumb span{position:absolute;left:8px;bottom:6px;font-weight:700;font-size:13px;text-shadow:0 1px 4px rgba(0,0,0,.8);display:flex;align-items:center;gap:4px}
+.thumb span svg{width:14px;height:14px;fill:#fff;stroke:#fff;stroke-width:1}
+
+/* ---------- Upload ---------- */
+.drop{display:grid;place-items:center;gap:8px;text-align:center;padding:30px 18px;margin-top:24px;border:2px dashed var(--line);border-radius:20px;cursor:pointer;color:var(--muted)}
+.drop:hover{border-color:var(--lilac);color:var(--text)}
+.drop input{display:none}
+.preview{margin-top:20px;max-height:380px;width:100%;border-radius:18px;background:#000}
+
+/* ---------- Kommentare / Modal ---------- */
+#sheet{position:fixed;z-index:50;background:var(--panel);display:flex;flex-direction:column;transform:translateX(105%);transition:transform .22s ease;right:0;top:0;bottom:0;width:400px;border-left:1px solid var(--line)}
+#sheet.open{transform:none}
+#sheet header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+#clist{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:16px}
+.c{display:flex;gap:10px}
+.c .av{--s:32px}
+.c .t{flex:1;min-width:0}
+.c .t b{font-weight:700}
+.c .t small{color:var(--muted);margin-left:6px}
+.c .t p{overflow-wrap:anywhere}
+.c .x{color:var(--muted);align-self:flex-start}
+#cform{display:flex;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+#cform input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:10px 16px;min-width:0}
+#modal{position:fixed;inset:0;z-index:70;background:rgba(10,4,16,.7);display:none;place-items:center;padding:20px}
+#modal.open{display:grid}
+#modal .card{background:var(--panel);border-radius:22px;padding:26px;width:100%;max-width:440px;border:1px solid var(--line)}
+#viewer{position:fixed;inset:0;z-index:40;background:var(--bg);display:none}
+#viewer.open{display:block}
+#viewer .close{position:absolute;top:12px;left:14px;z-index:8;width:42px;height:42px;border-radius:50%;background:rgba(30,14,44,.6);display:grid;place-items:center}
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--text);color:#2a1745;padding:11px 20px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:100;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.oauth{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 20px;border-radius:999px;font-weight:700;color:#fff;margin-bottom:10px}
+.oauth.discord{background:#5865f2}.oauth.discord:hover{background:#6d78f5}
+.oauth.google{background:#fff;color:#2a1745}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:18px 0 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.spin{width:22px;height:22px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:sp .8s linear infinite;margin:40px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ---------- Mobil ---------- */
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  nav.rail{position:fixed;z-index:30;left:0;right:0;bottom:0;height:calc(var(--nav) + env(safe-area-inset-bottom));padding:0 8px env(safe-area-inset-bottom);flex-direction:row;justify-content:space-around;align-items:center;border-right:0;border-top:1px solid var(--line);background:rgba(26,17,36,.94);backdrop-filter:blur(12px)}
+  .logo{display:none}
+  nav.rail a{flex-direction:column;gap:2px;font-size:11px;padding:8px 14px}
+  nav.rail a.cta{margin:0;padding:8px 18px;border-radius:16px}
+  .page{padding:22px 16px calc(var(--nav) + 40px)}
+  .clip{padding:0}
+  .frame{width:100%;aspect-ratio:auto;border-radius:0}
+  .meta{bottom:calc(var(--nav) + 14px + env(safe-area-inset-bottom))}
+  .rail-actions{bottom:calc(var(--nav) + 14px + env(safe-area-inset-bottom))}
+  #viewer .meta,#viewer .rail-actions{bottom:24px}
+  #sheet{top:auto;left:0;right:0;width:auto;height:72dvh;border-left:0;border-radius:22px 22px 0 0;transform:translateY(105%)}
+  #toast{bottom:calc(var(--nav) + 24px)}
+  .phead{gap:16px}
+  .phead .av{--s:84px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <nav class="rail" id="nav" aria-label="Hauptnavigation"></nav>
+  <main id="view"></main>
+</div>
+
+<aside id="sheet" aria-label="Kommentare">
+  <header><h3>Kommentare</h3><button class="ic" data-act="close-sheet" aria-label="Schließen"><svg class="i" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></header>
+  <div id="clist"></div>
+  <form id="cform"><input id="cinput" maxlength="500" placeholder="Kommentar schreiben …" autocomplete="off"><button class="btn small">Senden</button></form>
+</aside>
+<div id="modal"></div>
+<div id="viewer"></div>
+<div id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* =========================================================
+   Konfiguration (der publishable Key ist für den Browser gedacht –
+   geschützt wird alles über die Row-Level-Security-Regeln aus setup.sql)
+   ========================================================= */
+const SUPABASE_URL = 'https://oxmgdhbuqweqdgfjuiyt.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_In9D3KU5eWDnJGXStApKYw_RYyca7xg';
+const MAX_VIDEO_MB = 50;
+// Welche Login-Anbieter angezeigt werden. Nur eintragen, was du in Supabase
+// unter Authentication → Sign In / Providers aktiviert hast: 'discord', 'google'
+const OAUTH = ['discord'];
+const OAUTH_LABEL = { discord: 'Mit Discord fortfahren', google: 'Mit Google fortfahren' };
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ---------- Helfer ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => n >= 1e6 ? (n/1e6).toFixed(1).replace('.0','') + ' Mio.' : n >= 1e4 ? (n/1e3).toFixed(1).replace('.0','') + ' Tsd.' : String(n);
+function ago(d){const s=(Date.now()-new Date(d))/1000;if(s<60)return 'gerade eben';if(s<3600)return `vor ${Math.floor(s/60)} Min.`;if(s<86400)return `vor ${Math.floor(s/3600)} Std.`;return `vor ${Math.floor(s/86400)} Tg.`}
+const IC = {
+  heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',
+  comment:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.2A8.4 8.4 0 1 1 21 11.5z"/>',
+  share:'<path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>',
+  home:'<path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  vol:'<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
+  mute:'<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+  play:'<path d="M7 4v16l13-8z"/>',
+  film:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M10 9l5 3-5 3z"/>'
+};
+const svg = n => `<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
+function avatar(p, s = 36){
+  const st = `style="--s:${s}px"`;
+  if (p?.avatar_url) return `<img class="av" ${st} src="${esc(p.avatar_url)}" alt="">`;
+  return `<span class="av" ${st}>${esc((p?.username || '?')[0].toUpperCase())}</span>`;
+}
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
+function needAuth(){toast('Melde dich an, um mitzumachen.');location.hash='#/auth'}
+
+/* ---------- State ---------- */
+let me = null, myProfile = null;
+let likedSet = new Set(), followingSet = new Set();
+let muted = true, feedTab = 'foryou', authMode = 'login';
+const vmap = new Map();
+let activeIO = null, viewerIO = null, sheetVideo = null;
+const view = $('#view');
+
+async function loadMe(){
+  likedSet = new Set(); followingSet = new Set(); myProfile = null;
+  if (!me) return;
+  const [p, f] = await Promise.all([
+    sb.from('klipp_profiles').select('*').eq('id', me.id).maybeSingle(),
+    sb.from('klipp_follows').select('following_id').eq('follower_id', me.id)
+  ]);
+  myProfile = p.data;
+  followingSet = new Set((f.data || []).map(x => x.following_id));
+}
+
+/* ---------- Navigation ---------- */
+function renderNav(){
+  const h = location.hash || '#/';
+  const on = k => ({home: h === '#/' || h === '', up: h === '#/upload', me: h === '#/me' || (myProfile && h === '#/u/' + myProfile.username), auth: h === '#/auth'})[k] ? 'on' : '';
+  $('#nav').innerHTML = `
+    <div class="logo">klipp<i>.</i></div>
+    <a href="#/" class="${on('home')}">${svg('home')}<span>Start</span></a>
+    <a href="#/upload" class="cta ${on('up')}">${svg('plus')}<span>Hochladen</span></a>
+    ${me ? `<a href="#/me" class="${on('me')}">${svg('user')}<span>Profil</span></a>`
+         : `<a href="#/auth" class="${on('auth')}">${svg('user')}<span>Anmelden</span></a>`}`;
+}
+
+function cleanup(){
+  if (activeIO){activeIO.disconnect();activeIO=null}
+  closeSheet(); closeViewer();
+  $$('#view video').forEach(v => v.pause());
+}
+
+async function route(){
+  cleanup();
+  const h = location.hash || '#/';
+  renderNav();
+  if (h.startsWith('#/u/')) return viewProfile(decodeURIComponent(h.slice(4)));
+  if (h === '#/upload') return viewUpload();
+  if (h === '#/auth') return viewAuth();
+  if (h === '#/me') { if (!me) return needAuth(); if (!myProfile) { view.innerHTML='<div class="spin"></div>'; await loadMe(); } return location.replace('#/u/' + (myProfile?.username || '')); }
+  return viewFeed();
+}
+window.addEventListener('hashchange', route);
+
+/* =========================================================
+   Videos laden & Clips rendern
+   ========================================================= */
+const SEL = 'id,user_id,video_url,storage_path,caption,created_at,profiles:klipp_profiles!klipp_videos_user_id_fkey(username,avatar_url),likes:klipp_likes(count),comments:klipp_comments(count)';
+
+async function enrich(rows){
+  rows = rows || [];
+  if (me && rows.length){
+    const { data } = await sb.from('klipp_likes').select('video_id').eq('user_id', me.id).in('video_id', rows.map(r => r.id));
+    (data || []).forEach(x => likedSet.add(x.video_id));
+  }
+  return rows.map(r => {
+    const v = { ...r, likeCount: r.likes?.[0]?.count ?? 0, commentCount: r.comments?.[0]?.count ?? 0 };
+    vmap.set(v.id, v);
+    return v;
+  });
+}
+
+function followBtn(uid){
+  if (me && me.id === uid) return '';
+  return `<button class="follow ${followingSet.has(uid) ? 'on' : ''}" data-act="follow" data-uid="${uid}">${followingSet.has(uid) ? 'Gefolgt' : 'Folgen'}</button>`;
+}
+
+function clipHTML(v){
+  const p = v.profiles || {};
+  const own = me && me.id === v.user_id;
+  return `<article class="clip" data-id="${v.id}">
+    <div class="frame">
+      <video src="${esc(v.video_url)}" loop playsinline preload="metadata" data-act="toggle"></video>
+      <div class="playflag"><span><svg viewBox="0 0 24 24">${IC.play}</svg></span></div>
+      <div class="meta">
+        <div class="who">
+          <a href="#/u/${esc(p.username)}">${avatar(p, 38)}</a>
+          <a class="un" href="#/u/${esc(p.username)}">@${esc(p.username)}</a>
+          ${followBtn(v.user_id)}
+        </div>
+        ${v.caption ? `<p class="cap">${esc(v.caption)}</p>` : ''}
+      </div>
+      <div class="rail-actions">
+        <button data-act="like" class="${likedSet.has(v.id) ? 'on' : ''}" aria-label="Gefällt mir"><span class="ring">${svg('heart')}</span><span class="n">${fmt(v.likeCount)}</span></button>
+        <button data-act="comment" aria-label="Kommentare"><span class="ring">${svg('comment')}</span><span class="cn">${fmt(v.commentCount)}</span></button>
+        <button data-act="share" aria-label="Teilen"><span class="ring">${svg('share')}</span><span>Teilen</span></button>
+        ${own ? `<button data-act="delete" aria-label="Löschen"><span class="ring">${svg('trash')}</span><span>Löschen</span></button>` : ''}
+      </div>
+    </div>
+  </article>`;
+}
+
+function attachAutoplay(container){
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const vid = $('video', e.target), frame = $('.frame', e.target);
+      if (e.isIntersecting && e.intersectionRatio >= .6){
+        vid.muted = muted;
+        vid.play().then(() => frame.classList.remove('paused')).catch(() => {});
+      } else {
+        vid.pause(); frame.classList.remove('paused');
+        if (!e.isIntersecting) vid.currentTime = 0;
+      }
+    });
+  }, { threshold: [0, .6, 1] });
+  $$('.clip', container).forEach(c => {
+    io.observe(c);
+    const vid = $('video', c);
+    vid.addEventListener('loadedmetadata', () => { if (vid.videoWidth > vid.videoHeight * 1.1) vid.classList.add('wide'); });
+  });
+  return io;
+}
+
+/* =========================================================
+   Feed
+   ========================================================= */
+async function viewFeed(){
+  view.innerHTML = `<div class="feedwrap">
+    <div class="tabs">
+      <button data-tab="following" class="${feedTab === 'following' ? 'on' : ''}">Folge ich</button>
+      <button data-tab="foryou" class="${feedTab === 'foryou' ? 'on' : ''}">Für dich</button>
+    </div>
+    <button class="mutebtn" data-act="mute" aria-label="Ton an/aus">${svg(muted ? 'mute' : 'vol')}</button>
+    <div class="feed" id="feed"><div class="spin"></div></div>
+  </div>`;
+  const feed = $('#feed');
+  let rows = [];
+
+  if (feedTab === 'following'){
+    if (!me){
+      feed.innerHTML = `<div class="empty"><div><h2>Folge deinen Lieblings-Creatorn</h2><p class="muted">Melde dich an, dann siehst du hier ihre neuesten Clips.</p><a class="btn" href="#/auth">Anmelden</a></div></div>`;
+      return;
+    }
+    const ids = [...followingSet];
+    if (!ids.length){
+      feed.innerHTML = `<div class="empty"><div><h2>Noch niemandem gefolgt</h2><p class="muted">Folge Creatorn im Tab „Für dich“, dann erscheinen ihre Videos hier.</p></div></div>`;
+      return;
+    }
+    const { data, error } = await sb.from('klipp_videos').select(SEL).in('user_id', ids).order('created_at', { ascending: false }).limit(40);
+    if (error) return feedError(feed, error);
+    rows = data;
+  } else {
+    const { data, error } = await sb.from('klipp_videos').select(SEL).order('created_at', { ascending: false }).limit(40);
+    if (error) return feedError(feed, error);
+    rows = data;
+    // Geteilter Link: ?v=<id> zeigt dieses Video zuerst
+    const shared = new URLSearchParams(location.search).get('v');
+    if (shared){
+      const { data: one } = await sb.from('klipp_videos').select(SEL).eq('id', shared).maybeSingle();
+      if (one) rows = [one, ...rows.filter(r => r.id !== one.id)];
+    }
+  }
+
+  const vids = await enrich(rows);
+  if (!vids.length){
+    feed.innerHTML = `<div class="empty"><div><h2>Noch nichts los hier</h2><p class="muted">Lade das erste Video hoch und starte die Plattform.</p><a class="btn" href="#/upload">Video hochladen</a></div></div>`;
+    return;
+  }
+  feed.innerHTML = vids.map(clipHTML).join('');
+  activeIO = attachAutoplay(feed);
+}
+function feedError(el, error){
+  el.innerHTML = `<div class="empty"><div><h2>Das hat nicht geklappt</h2><p class="muted">${esc(error.message)}</p></div></div>`;
+}
+
+/* =========================================================
+   Aktionen (like, follow, share, comment, delete …)
+   ========================================================= */
+function paintLike(v){
+  $$(`.clip[data-id="${v.id}"] [data-act="like"]`).forEach(b => {
+    b.classList.toggle('on', likedSet.has(v.id));
+    $('.n', b).textContent = fmt(v.likeCount);
+  });
+}
+async function toggleLike(v){
+  if (!me) return needAuth();
+  const on = !likedSet.has(v.id);
+  on ? likedSet.add(v.id) : likedSet.delete(v.id);
+  v.likeCount += on ? 1 : -1; paintLike(v);
+  const { error } = on
+    ? await sb.from('klipp_likes').insert({ user_id: me.id, video_id: v.id })
+    : await sb.from('klipp_likes').delete().match({ user_id: me.id, video_id: v.id });
+  if (error){
+    on ? likedSet.delete(v.id) : likedSet.add(v.id);
+    v.likeCount += on ? -1 : 1; paintLike(v); toast('Like konnte nicht gespeichert werden.');
+  }
+}
+async function toggleFollow(uid){
+  if (!me) return needAuth();
+  if (uid === me.id) return;
+  const on = !followingSet.has(uid);
+  const paint = () => {
+    $$(`[data-act="follow"][data-uid="${uid}"]`).forEach(b => {
+      b.classList.toggle('on', followingSet.has(uid));
+      b.textContent = followingSet.has(uid) ? (b.classList.contains('follow') ? 'Gefolgt' : 'Gefolgt') : 'Folgen';
+    });
+    const fc = $('#fcount'); if (fc && fc.dataset.uid === uid) fc.textContent = fmt(+fc.dataset.n);
+  };
+  const fc = $('#fcount');
+  on ? followingSet.add(uid) : followingSet.delete(uid);
+  if (fc && fc.dataset.uid === uid) fc.dataset.n = +fc.dataset.n + (on ? 1 : -1);
+  paint();
+  const { error } = on
+    ? await sb.from('klipp_follows').insert({ follower_id: me.id, following_id: uid })
+    : await sb.from('klipp_follows').delete().match({ follower_id: me.id, following_id: uid });
+  if (error){
+    on ? followingSet.delete(uid) : followingSet.add(uid);
+    if (fc && fc.dataset.uid === uid) fc.dataset.n = +fc.dataset.n + (on ? -1 : 1);
+    paint(); toast('Das hat nicht geklappt.');
+  }
+}
+async function shareVideo(v){
+  const url = location.href.split('#')[0].split('?')[0] + '?v=' + v.id;
+  try {
+    if (navigator.share) await navigator.share({ title: 'Klipp', text: v.caption || 'Schau dir das an', url });
+    else { await navigator.clipboard.writeText(url); toast('Link kopiert'); }
+  } catch (e) { if (e.name !== 'AbortError') toast('Link: ' + url); }
+}
+async function deleteVideo(v){
+  if (!confirm('Dieses Video endgültig löschen?')) return;
+  const { error } = await sb.from('klipp_videos').delete().eq('id', v.id);
+  if (error) return toast('Löschen fehlgeschlagen.');
+  await sb.storage.from('klipp-videos').remove([v.storage_path]);
+  $$(`.clip[data-id="${v.id}"]`).forEach(c => c.remove());
+  vmap.delete(v.id); toast('Video gelöscht');
+  if ($('#viewer.open')) { closeViewer(); route(); }
+}
+
+/* ---------- Kommentare ---------- */
+async function openComments(v){
+  sheetVideo = v;
+  $('#sheet').classList.add('open');
+  $('#clist').innerHTML = '<div class="spin"></div>';
+  const { data, error } = await sb.from('klipp_comments').select('id,body,created_at,user_id,profiles:klipp_profiles!klipp_comments_user_id_fkey(username,avatar_url)').eq('video_id', v.id).order('created_at', { ascending: true }).limit(200);
+  if (error) { $('#clist').innerHTML = `<p class="muted">${esc(error.message)}</p>`; return; }
+  const list = $('#clist');
+  list.innerHTML = data.length ? data.map(commentHTML).join('') : '<p class="muted" style="text-align:center;margin-top:30px">Noch keine Kommentare. Schreib den ersten!</p>';
+}
+function commentHTML(c){
+  const p = c.profiles || {};
+  return `<div class="c" data-cid="${c.id}">
+    <a href="#/u/${esc(p.username)}">${avatar(p, 32)}</a>
+    <div class="t"><b>${esc(p.username)}</b><small>${ago(c.created_at)}</small><p>${esc(c.body)}</p></div>
+    ${me && me.id === c.user_id ? `<button class="x" data-act="del-comment" data-id="${c.id}" aria-label="Kommentar löschen">${svg('x')}</button>` : ''}
+  </div>`;
+}
+function closeSheet(){ $('#sheet').classList.remove('open'); sheetVideo = null; }
+function bumpComments(v, d){
+  v.commentCount = Math.max(0, v.commentCount + d);
+  $$(`.clip[data-id="${v.id}"] .cn`).forEach(e => e.textContent = fmt(v.commentCount));
+}
+$('#cform').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!me) return needAuth();
+  const input = $('#cinput'), body = input.value.trim();
+  if (!body || !sheetVideo) return;
+  const v = sheetVideo; input.value = '';
+  const { data, error } = await sb.from('klipp_comments').insert({ video_id: v.id, user_id: me.id, body }).select('id,body,created_at,user_id').single();
+  if (error) { input.value = body; return toast('Kommentar konnte nicht gesendet werden.'); }
+  data.profiles = { username: myProfile?.username, avatar_url: myProfile?.avatar_url };
+  const list = $('#clist');
+  if (!$('.c', list)) list.innerHTML = '';
+  list.insertAdjacentHTML('beforeend', commentHTML(data));
+  list.scrollTop = list.scrollHeight;
+  bumpComments(v, 1);
+});
+
+/* ---------- globaler Klick-Handler ---------- */
+document.addEventListener('click', async e => {
+  const tab = e.target.closest('[data-tab]');
+  if (tab){ feedTab = tab.dataset.tab; return viewFeed(); }
+  const btn = e.target.closest('[data-act]');
+  if (!btn) return;
+  const act = btn.dataset.act;
+  const clip = btn.closest('.clip');
+  const v = clip && vmap.get(clip.dataset.id);
+
+  if (act === 'toggle'){
+    const vid = btn, frame = clip.querySelector('.frame');
+    if (vid.paused){ vid.muted = muted; vid.play(); frame.classList.remove('paused'); }
+    else { vid.pause(); frame.classList.add('paused'); }
+  }
+  else if (act === 'like' && v) toggleLike(v);
+  else if (act === 'comment' && v) openComments(v);
+  else if (act === 'share' && v) shareVideo(v);
+  else if (act === 'delete' && v) deleteVideo(v);
+  else if (act === 'follow') toggleFollow(btn.dataset.uid);
+  else if (act === 'close-sheet') closeSheet();
+  else if (act === 'mute'){
+    muted = !muted;
+    btn.innerHTML = svg(muted ? 'mute' : 'vol');
+    $$('video').forEach(x => x.muted = muted);
+  }
+  else if (act === 'del-comment'){
+    const { error } = await sb.from('klipp_comments').delete().eq('id', btn.dataset.id);
+    if (error) return toast('Löschen fehlgeschlagen.');
+    btn.closest('.c').remove();
+    if (sheetVideo) bumpComments(sheetVideo, -1);
+  }
+  else if (act === 'close-viewer'){ closeViewer(); }
+  else if (act === 'logout'){ await sb.auth.signOut(); toast('Abgemeldet'); }
+  else if (act === 'edit-profile') openEditProfile();
+  else if (act === 'close-modal') $('#modal').classList.remove('open');
+});
+document.addEventListener('dblclick', e => {
+  const vid = e.target.closest('video[data-act="toggle"]');
+  if (!vid) return;
+  const v = vmap.get(vid.closest('.clip').dataset.id);
+  if (v && !likedSet.has(v.id)) toggleLike(v);
+});
+
+/* =========================================================
+   Profil
+   ========================================================= */
+async function viewProfile(username){
+  view.innerHTML = '<div class="page"><div class="spin"></div></div>';
+  const { data: p } = await sb.from('klipp_profiles').select('*').eq('username', username).maybeSingle();
+  if (!p){ view.innerHTML = `<div class="empty"><div><h2>Profil nicht gefunden</h2><p class="muted">Den Nutzer @${esc(username)} gibt es nicht.</p><a class="btn" href="#/">Zur Startseite</a></div></div>`; return; }
+  const [vr, fers, fing] = await Promise.all([
+    sb.from('klipp_videos').select(SEL).eq('user_id', p.id).order('created_at', { ascending: false }),
+    sb.from('klipp_follows').select('*', { count: 'exact', head: true }).eq('following_id', p.id),
+    sb.from('klipp_follows').select('*', { count: 'exact', head: true }).eq('follower_id', p.id)
+  ]);
+  const vids = await enrich(vr.data);
+  const own = me && me.id === p.id;
+  view.innerHTML = `<div class="page">
+    <div class="phead">
+      ${avatar(p, 104)}
+      <div class="pinfo">
+        <h1>@${esc(p.username)}</h1>
+        <div class="stats">
+          <div><b>${vids.length}</b><span>Videos</span></div>
+          <div><b id="fcount" data-uid="${p.id}" data-n="${fers.count || 0}">${fmt(fers.count || 0)}</b><span>Follower</span></div>
+          <div><b>${fmt(fing.count || 0)}</b><span>Folge ich</span></div>
+        </div>
+        ${p.bio ? `<p class="bio">${esc(p.bio)}</p>` : ''}
+        <div class="pbtns">
+          ${own ? `<button class="btn ghost small" data-act="edit-profile">Profil bearbeiten</button><button class="btn ghost small" data-act="logout">Abmelden</button>`
+                : `<button class="btn small follow-main ${followingSet.has(p.id) ? 'on' : ''}" data-act="follow" data-uid="${p.id}">${followingSet.has(p.id) ? 'Gefolgt' : 'Folgen'}</button>`}
+        </div>
+      </div>
+    </div>
+    ${vids.length ? `<div class="grid">${vids.map((v, i) => `
+      <button class="thumb" data-i="${i}" aria-label="Video ansehen">
+        <video src="${esc(v.video_url)}#t=0.3" preload="metadata" muted playsinline></video>
+        <span><svg class="i" viewBox="0 0 24 24">${IC.heart}</svg>${fmt(v.likeCount)}</span>
+      </button>`).join('')}</div>`
+    : `<div class="muted" style="text-align:center;padding:40px 0">${own ? 'Du hast noch nichts hochgeladen.' : 'Noch keine Videos.'}${own ? '<br><a class="btn" style="margin-top:16px" href="#/upload">Erstes Video hochladen</a>' : ''}</div>`}
+  </div>`;
+  $$('.thumb', view).forEach(t => t.addEventListener('click', () => openViewer(vids, +t.dataset.i)));
+}
+/* Follow-Button auf Profil: Style wie Button, nicht wie Overlay-Pille */
+const st = document.createElement('style');
+st.textContent = '.follow-main{background:var(--accent)}.follow-main.on{background:var(--panel2);color:var(--text)}';
+document.head.appendChild(st);
+
+function openViewer(vids, index){
+  const el = $('#viewer');
+  el.innerHTML = `<button class="close" data-act="close-viewer" aria-label="Schließen">${svg('x')}</button><div class="feed" id="vfeed">${vids.map(clipHTML).join('')}</div>`;
+  el.classList.add('open');
+  const vf = $('#vfeed');
+  vf.children[index].scrollIntoView();
+  viewerIO = attachAutoplay(vf);
+}
+function closeViewer(){
+  if (viewerIO){viewerIO.disconnect();viewerIO=null}
+  const el = $('#viewer'); el.classList.remove('open'); el.innerHTML = '';
+}
+
+function openEditProfile(){
+  const m = $('#modal');
+  m.innerHTML = `<div class="card">
+    <h2>Profil bearbeiten</h2>
+    <form id="pform">
+      <div class="field"><label for="pav">Profilbild</label><input type="file" id="pav" accept="image/jpeg,image/png,image/webp"></div>
+      <div class="field"><label for="pbio">Bio</label><textarea id="pbio" maxlength="160" placeholder="Erzähl kurz etwas über dich">${esc(myProfile?.bio || '')}</textarea></div>
+      <div class="err" id="perr"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px">
+        <button type="button" class="btn ghost" data-act="close-modal">Abbrechen</button>
+        <button class="btn" id="psave">Speichern</button>
+      </div>
+    </form></div>`;
+  m.classList.add('open');
+  $('#pform').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = $('#psave'); btn.disabled = true; btn.textContent = 'Speichern …';
+    const upd = { bio: $('#pbio').value.trim() };
+    const f = $('#pav').files[0];
+    if (f){
+      if (f.size > 5 * 1024 * 1024){ $('#perr').textContent = 'Das Bild darf höchstens 5 MB groß sein.'; btn.disabled = false; btn.textContent = 'Speichern'; return; }
+      const ext = (f.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = `${me.id}/avatar-${Date.now()}.${ext}`;
+      const up = await sb.storage.from('klipp-avatars').upload(path, f, { contentType: f.type, upsert: true });
+      if (up.error){ $('#perr').textContent = up.error.message; btn.disabled = false; btn.textContent = 'Speichern'; return; }
+      upd.avatar_url = sb.storage.from('klipp-avatars').getPublicUrl(path).data.publicUrl;
+    }
+    const { error } = await sb.from('klipp_profiles').update(upd).eq('id', me.id);
+    if (error){ $('#perr').textContent = error.message; btn.disabled = false; btn.textContent = 'Speichern'; return; }
+    m.classList.remove('open'); await loadMe(); toast('Profil gespeichert'); route();
+  });
+}
+
+/* =========================================================
+   Upload
+   ========================================================= */
+function viewUpload(){
+  if (!me){ view.innerHTML = `<div class="empty"><div><h2>Zum Hochladen anmelden</h2><p class="muted">Du brauchst ein Konto, um Videos zu veröffentlichen.</p><a class="btn" href="#/auth">Anmelden</a></div></div>`; return; }
+  view.innerHTML = `<div class="page"><div class="narrow">
+    <h1>Video hochladen</h1>
+    <p class="muted" style="margin-top:8px">MP4, WebM oder MOV, bis ${MAX_VIDEO_MB} MB. Hochkant (9:16) sieht am besten aus.</p>
+    <form id="uform">
+      <label class="drop" id="drop">${svg('film')}<b id="dname">Video auswählen</b><span>Tippen oder Datei hierher ziehen</span>
+        <input type="file" id="ufile" accept="video/mp4,video/webm,video/quicktime"></label>
+      <video id="uprev" class="preview" controls playsinline hidden></video>
+      <div class="field"><label for="ucap">Beschreibung</label><textarea id="ucap" maxlength="150" placeholder="Worum geht’s in deinem Video?"></textarea></div>
+      <div class="err" id="uerr"></div>
+      <button class="btn" id="ubtn" style="width:100%" disabled>Veröffentlichen</button>
+    </form></div></div>`;
+  const file = $('#ufile'), prev = $('#uprev'), btn = $('#ubtn');
+  const pick = f => {
+    $('#uerr').textContent = '';
+    if (!f) return;
+    if (!/^video\//.test(f.type)) { $('#uerr').textContent = 'Das ist keine Videodatei.'; return; }
+    if (f.size > MAX_VIDEO_MB * 1024 * 1024){ $('#uerr').textContent = `Die Datei ist größer als ${MAX_VIDEO_MB} MB.`; return; }
+    $('#dname').textContent = f.name;
+    prev.src = URL.createObjectURL(f); prev.hidden = false; btn.disabled = false;
+    pick.file = f;
+  };
+  file.addEventListener('change', () => pick(file.files[0]));
+  const drop = $('#drop');
+  drop.addEventListener('dragover', e => e.preventDefault());
+  drop.addEventListener('drop', e => { e.preventDefault(); pick(e.dataTransfer.files[0]); });
+
+  $('#uform').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = pick.file; if (!f) return;
+    btn.disabled = true; btn.textContent = 'Wird hochgeladen …';
+    const ext = (f.name.split('.').pop() || 'mp4').toLowerCase();
+    const path = `${me.id}/${Date.now()}.${ext}`;
+    const up = await sb.storage.from('klipp-videos').upload(path, f, { contentType: f.type, cacheControl: '3600' });
+    if (up.error){ $('#uerr').textContent = 'Upload fehlgeschlagen: ' + up.error.message; btn.disabled = false; btn.textContent = 'Veröffentlichen'; return; }
+    const url = sb.storage.from('klipp-videos').getPublicUrl(path).data.publicUrl;
+    const ins = await sb.from('klipp_videos').insert({ user_id: me.id, video_url: url, storage_path: path, caption: $('#ucap').value.trim() });
+    if (ins.error){
+      await sb.storage.from('klipp-videos').remove([path]);
+      $('#uerr').textContent = 'Speichern fehlgeschlagen: ' + ins.error.message;
+      btn.disabled = false; btn.textContent = 'Veröffentlichen'; return;
+    }
+    toast('Veröffentlicht');
+    feedTab = 'foryou';
+    location.hash = '#/u/' + myProfile.username;
+  });
+}
+
+/* =========================================================
+   Anmelden / Registrieren
+   ========================================================= */
+function viewAuth(){
+  if (me){ location.replace('#/'); return; }
+  const reg = authMode === 'register';
+  view.innerHTML = `<div class="page"><div class="narrow">
+    <h1>${reg ? 'Konto erstellen' : 'Willkommen zurück'}</h1>
+    <p class="muted" style="margin-top:8px">${reg ? 'Mach mit, lade Clips hoch und folge Creatorn.' : 'Melde dich an, um zu liken, zu kommentieren und hochzuladen.'}</p>
+    <div class="seg"><button data-m="login" class="${reg ? '' : 'on'}">Anmelden</button><button data-m="register" class="${reg ? 'on' : ''}">Registrieren</button></div>
+    <div style="margin-top:20px">${OAUTH.map(p => `<button type="button" class="oauth ${p}" data-oauth="${p}">${OAUTH_LABEL[p]}</button>`).join('')}</div>
+    <div class="or"><span>oder mit E-Mail</span></div>
+    <form id="aform" novalidate>
+      ${reg ? `<div class="field"><label for="aun">Nutzername</label><input id="aun" autocomplete="username" maxlength="24" placeholder="z. B. max.klipp" required></div>` : ''}
+      <div class="field"><label for="aem">E-Mail</label><input id="aem" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="apw">Passwort</label><input id="apw" type="password" autocomplete="${reg ? 'new-password' : 'current-password'}" minlength="6" required></div>
+      <div class="err" id="aerr" role="alert"></div>
+      <button class="btn" id="abtn" style="width:100%">${reg ? 'Konto erstellen' : 'Anmelden'}</button>
+    </form></div></div>`;
+  $$('.seg button', view).forEach(b => b.addEventListener('click', () => { authMode = b.dataset.m; viewAuth(); }));
+  $$('[data-oauth]', view).forEach(b => b.addEventListener('click', async () => {
+    const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.oauth, options: { redirectTo: location.href.split('#')[0].split('?')[0] } });
+    if (error) $('#aerr').textContent = authError(error.message);
+  }));
+  $('#aform').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('#aerr'), btn = $('#abtn');
+    err.className = 'err'; err.textContent = '';
+    const email = $('#aem').value.trim(), password = $('#apw').value;
+    if (!email || password.length < 6){ err.textContent = 'Bitte gültige E-Mail und ein Passwort mit mindestens 6 Zeichen eingeben.'; return; }
+    btn.disabled = true;
+    if (reg){
+      const username = $('#aun').value.trim().toLowerCase();
+      if (!/^[a-z0-9_.]{3,24}$/.test(username)){ err.textContent = 'Nutzername: 3–24 Zeichen, nur Buchstaben, Zahlen, _ und .'; btn.disabled = false; return; }
+      const { data, error } = await sb.auth.signUp({ email, password, options: { data: { username }, emailRedirectTo: location.href.split('#')[0].split('?')[0] } });
+      if (error){ err.textContent = authError(error.message); btn.disabled = false; return; }
+      if (!data.session){ err.className = 'err ok'; err.textContent = 'Fast geschafft: Wir haben dir eine Bestätigungs-Mail geschickt. Klicke den Link, dann kannst du dich anmelden.'; btn.disabled = false; }
+    } else {
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (error){ err.textContent = authError(error.message); btn.disabled = false; }
+    }
+  });
+}
+function authError(m){
+  if (/Invalid login/i.test(m)) return 'E-Mail oder Passwort stimmt nicht.';
+  if (/already registered/i.test(m)) return 'Diese E-Mail ist schon registriert.';
+  if (/Database error/i.test(m)) return 'Dieser Nutzername ist schon vergeben.';
+  if (/not confirmed/i.test(m)) return 'Bitte bestätige zuerst deine E-Mail-Adresse.';
+  if (/rate limit/i.test(m)) return 'Zu viele Versuche. Probier es in ein paar Minuten nochmal.';
+  return m;
+}
+
+/* =========================================================
+   Start
+   ========================================================= */
+(async function init(){
+  view.innerHTML = '<div class="spin"></div>';
+  const { data } = await sb.auth.getSession();
+  me = data.session?.user || null;
+  let lastUid = me?.id || null;
+  await loadMe();
+  sb.auth.onAuthStateChange((ev, session) => {
+    const uid = session?.user?.id || null;
+    if (uid === lastUid) return;
+    lastUid = uid; me = session?.user || null;
+    setTimeout(async () => {
+      await loadMe();
+      if (location.hash === '#/auth') location.hash = '#/'; else route();
+    }, 0);
+  });
+  route();
+})();
+</script>
+</body>
+</html>
