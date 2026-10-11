@@ -30,7 +30,7 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
 nav.rail{padding:22px 14px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line);background:var(--bg)}
 .logo{font:800 32px 'Bricolage Grotesque',sans-serif;letter-spacing:-.05em;padding:0 12px 20px}
 .logo i{color:var(--accent);font-style:normal}
-nav.rail a{display:flex;align-items:center;gap:14px;padding:12px;border-radius:14px;color:var(--muted);font-weight:500}
+nav.rail a{display:flex;align-items:center;gap:14px;padding:12px;position:relative;border-radius:14px;color:var(--muted);font-weight:500}
 nav.rail a:hover,nav.rail a.on{color:var(--text);background:var(--panel)}
 nav.rail a.cta{background:var(--accent);color:#fff;margin:6px 0}
 nav.rail a.cta:hover{background:#ff5c8d}
@@ -99,20 +99,71 @@ h1{font-size:34px;line-height:1.1;font-weight:800}
 .empty .btn{margin-top:18px}
 
 /* ---------- Profil ---------- */
-.phead{display:flex;gap:24px;align-items:center;flex-wrap:wrap;max-width:760px;margin:0 auto 28px}
-.phead .av{--s:104px}
-.pinfo{flex:1;min-width:220px}
-.pinfo h1{font-size:28px}
-.stats{display:flex;gap:22px;margin:10px 0}
-.stats b{font-size:18px;display:block;line-height:1.1}
-.stats span{color:var(--muted);font-size:13px}
-.bio{color:#dccff0;margin-bottom:14px;overflow-wrap:anywhere;white-space:pre-wrap}
-.pbtns{display:flex;gap:10px;flex-wrap:wrap}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;max-width:760px;margin:0 auto}
+.pwide{max-width:1000px;margin:0 auto}
+.ph2{display:flex;gap:32px;align-items:flex-start;margin-bottom:30px}
+.ph2 .av{--s:150px}
+.pinfo2{flex:1;min-width:0;padding-top:6px}
+.pname{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pname h1{font-size:26px;line-height:1.15;overflow-wrap:anywhere}
+.pname .sep{width:1px;height:20px;background:var(--line)}
+.pname .uname{color:var(--muted);font-size:17px;font-weight:500}
+.pstats{display:flex;gap:20px;margin:12px 0 16px;flex-wrap:wrap}
+.pstats b{font-weight:800;margin-right:4px}
+.pbtns{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ic-btn{width:42px;height:42px;border-radius:50%;background:var(--panel2);display:grid;place-items:center}
+.ic-btn:hover{background:var(--line)}
+.bio{margin-top:16px;color:#e3d7f3;overflow-wrap:anywhere;white-space:pre-wrap;max-width:560px}
+.ptabs{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.tabs2{display:flex;gap:6px}
+.tabs2 button{display:flex;align-items:center;gap:8px;padding:12px 22px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs2 button:hover{color:var(--text)}
+.tabs2 button.on{color:var(--text);border-color:var(--text)}
+.tabs2 svg.i{width:18px;height:18px}
+.chips{display:flex;background:var(--panel);border-radius:10px;padding:3px;margin-bottom:6px}
+.chips button{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:700;color:var(--muted)}
+.chips button.on{background:var(--panel2);color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
 .thumb{position:relative;aspect-ratio:9/14;background:var(--panel);border-radius:12px;overflow:hidden}
 .thumb video{width:100%;height:100%;object-fit:cover;pointer-events:none}
 .thumb span{position:absolute;left:8px;bottom:6px;font-weight:700;font-size:13px;text-shadow:0 1px 4px rgba(0,0,0,.8);display:flex;align-items:center;gap:4px}
 .thumb span svg{width:14px;height:14px;fill:#fff;stroke:#fff;stroke-width:1}
+.msg{text-align:center;padding:48px 0;color:var(--muted)}
+.msg .btn{margin-top:16px}
+.mlist{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.mlist .btn{width:100%}
+
+/* ---------- Suche / Listen / Chat ---------- */
+.narrow2{max-width:640px}
+.sinput,.sbar input{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:13px 20px;margin-top:16px}
+.sinput:focus,.sbar input:focus{outline:2px solid var(--lilac);border-color:transparent}
+.sbar{display:flex;gap:10px;align-items:center;margin:16px 0}
+.sbar input{margin-top:0}
+.smode{display:inline-flex}
+.row{display:flex;align-items:center;gap:14px;padding:12px;border-radius:16px;width:100%;text-align:left}
+.row:hover{background:var(--panel)}
+.row.unread{background:var(--panel)}
+.row .t{flex:1;min-width:0}
+.row .t b{font-weight:700}
+.row .t p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.row .when{color:var(--muted);font-size:12px;white-space:nowrap}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none}
+.tagchips{display:flex;flex-wrap:wrap;gap:8px}
+.tagchips a{padding:7px 14px;border-radius:999px;background:var(--panel2);font-weight:700;font-size:14px}
+.tagchips a:hover{background:var(--line)}
+.tagchips small{color:var(--muted);margin-left:4px}
+a.tag{font-weight:700;color:#fff}
+a.tag:hover{text-decoration:underline}
+.badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--accent);color:#fff;font:700 11px/18px 'DM Sans',sans-serif;text-align:center;font-style:normal;margin-left:auto}
+.badge[hidden]{display:none}
+.chat{display:flex;flex-direction:column;height:100%}
+.chath{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.chath b{font-weight:700}
+.bubbles{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:16px 18px}
+.bub{max-width:75%;padding:9px 14px;border-radius:18px 18px 18px 6px;background:var(--panel2);overflow-wrap:anywhere;white-space:pre-wrap;align-self:flex-start}
+.bub.me{align-self:flex-end;background:var(--accent);color:#fff;border-radius:18px 18px 6px 18px}
+.bub small{display:block;font-size:11px;opacity:.65;margin-top:2px}
+.chat form{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+.chat form input{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:11px 18px}
 
 /* ---------- Upload ---------- */
 .drop{display:grid;place-items:center;gap:8px;text-align:center;padding:30px 18px;margin-top:24px;border:2px dashed var(--line);border-radius:20px;cursor:pointer;color:var(--muted)}
@@ -155,7 +206,10 @@ h1{font-size:34px;line-height:1.1;font-weight:800}
   .app{grid-template-columns:1fr}
   nav.rail{position:fixed;z-index:30;left:0;right:0;bottom:0;height:calc(var(--nav) + env(safe-area-inset-bottom));padding:0 8px env(safe-area-inset-bottom);flex-direction:row;justify-content:space-around;align-items:center;border-right:0;border-top:1px solid var(--line);background:rgba(26,17,36,.94);backdrop-filter:blur(12px)}
   .logo{display:none}
-  nav.rail a{flex-direction:column;gap:2px;font-size:11px;padding:8px 14px}
+  nav.rail a{flex-direction:column;gap:2px;font-size:11px;padding:8px 12px;position:relative}
+  nav.rail a .lbl{display:none}
+  nav.rail a .badge{position:absolute;top:2px;right:2px;margin:0}
+  .chat{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom))}
   nav.rail a.cta{margin:0;padding:8px 18px;border-radius:16px}
   .page{padding:22px 16px calc(var(--nav) + 40px)}
   .clip{padding:0}
@@ -165,8 +219,12 @@ h1{font-size:34px;line-height:1.1;font-weight:800}
   #viewer .meta,#viewer .rail-actions{bottom:24px}
   #sheet{top:auto;left:0;right:0;width:auto;height:72dvh;border-left:0;border-radius:22px 22px 0 0;transform:translateY(105%)}
   #toast{bottom:calc(var(--nav) + 24px)}
-  .phead{gap:16px}
-  .phead .av{--s:84px}
+  .ph2{flex-direction:column;align-items:center;text-align:center;gap:16px}
+  .ph2 .av{--s:104px}
+  .pname,.pstats,.pbtns{justify-content:center}
+  .tabs2 button{padding:12px 14px}
+  .grid{grid-template-columns:repeat(3,1fr);gap:4px}
+  .narrow2{max-width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -221,6 +279,12 @@ const IC = {
   x:'<path d="M18 6 6 18M6 6l12 12"/>',
   trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
   play:'<path d="M7 4v16l13-8z"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+  bookmark:'<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+  back:'<path d="M15 18l-6-6 6-6"/>',
   film:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M10 9l5 3-5 3z"/>'
 };
 const svg = n => `<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
@@ -235,38 +299,64 @@ function needAuth(){toast('Melde dich an, um mitzumachen.');location.hash='#/aut
 
 /* ---------- State ---------- */
 let me = null, myProfile = null;
-let likedSet = new Set(), followingSet = new Set();
+let likedSet = new Set(), followingSet = new Set(), savedSet = new Set();
+let msgTimer = null, sTimer = null, sMode = 'users', unread = { n: 0, m: 0 };
 let muted = true, feedTab = 'foryou', authMode = 'login';
 const vmap = new Map();
 let activeIO = null, viewerIO = null, sheetVideo = null;
 const view = $('#view');
 
 async function loadMe(){
-  likedSet = new Set(); followingSet = new Set(); myProfile = null;
+  likedSet = new Set(); followingSet = new Set(); savedSet = new Set(); myProfile = null;
   if (!me) return;
-  const [p, f] = await Promise.all([
+  const [p, f, b] = await Promise.all([
     sb.from('klipp_profiles').select('*').eq('id', me.id).maybeSingle(),
-    sb.from('klipp_follows').select('following_id').eq('follower_id', me.id)
+    sb.from('klipp_follows').select('following_id').eq('follower_id', me.id),
+    sb.from('klipp_bookmarks').select('video_id').eq('user_id', me.id).limit(1000)
   ]);
   myProfile = p.data;
   followingSet = new Set((f.data || []).map(x => x.following_id));
+  savedSet = new Set((b.data || []).map(x => x.video_id));
 }
 
 /* ---------- Navigation ---------- */
 function renderNav(){
   const h = location.hash || '#/';
-  const on = k => ({home: h === '#/' || h === '', up: h === '#/upload', me: h === '#/me' || (myProfile && h === '#/u/' + myProfile.username), auth: h === '#/auth'})[k] ? 'on' : '';
+  const on = k => ({
+    home: h === '#/' || h === '', srch: h.startsWith('#/search') || h.startsWith('#/tag/'), up: h === '#/upload',
+    msg: h.startsWith('#/messages'), inb: h === '#/inbox',
+    me: h === '#/me' || (myProfile && h === '#/u/' + myProfile.username), auth: h === '#/auth'
+  })[k] ? 'on' : '';
   $('#nav').innerHTML = `
     <div class="logo">klipp<i>.</i></div>
-    <a href="#/" class="${on('home')}">${svg('home')}<span>Start</span></a>
-    <a href="#/upload" class="cta ${on('up')}">${svg('plus')}<span>Hochladen</span></a>
-    ${me ? `<a href="#/me" class="${on('me')}">${svg('user')}<span>Profil</span></a>`
-         : `<a href="#/auth" class="${on('auth')}">${svg('user')}<span>Anmelden</span></a>`}`;
+    <a href="#/" class="${on('home')}" aria-label="Start">${svg('home')}<span class="lbl">Start</span></a>
+    <a href="#/search" class="${on('srch')}" aria-label="Suche">${svg('search')}<span class="lbl">Suche</span></a>
+    <a href="#/upload" class="cta ${on('up')}" aria-label="Hochladen">${svg('plus')}<span class="lbl">Hochladen</span></a>
+    ${me ? `<a href="#/messages" class="${on('msg')}" aria-label="Nachrichten">${svg('mail')}<span class="lbl">Nachrichten</span><i class="badge" id="b-m" hidden>0</i></a>
+            <a href="#/inbox" class="${on('inb')}" aria-label="Mitteilungen">${svg('bell')}<span class="lbl">Mitteilungen</span><i class="badge" id="b-n" hidden>0</i></a>
+            <a href="#/me" class="${on('me')}" aria-label="Profil">${svg('user')}<span class="lbl">Profil</span></a>`
+         : `<a href="#/auth" class="${on('auth')}" aria-label="Anmelden">${svg('user')}<span class="lbl">Anmelden</span></a>`}`;
+  paintBadges();
+}
+function paintBadges(){
+  [['n', '#b-n'], ['m', '#b-m']].forEach(([k, sel]) => {
+    const b = $(sel); if (!b) return;
+    b.textContent = unread[k] > 99 ? '99+' : unread[k]; b.hidden = !unread[k];
+  });
+}
+async function refreshBadges(){
+  if (!me){ unread = { n: 0, m: 0 }; paintBadges(); return; }
+  const [n, m] = await Promise.all([
+    sb.from('klipp_notifications').select('*', { count: 'exact', head: true }).eq('user_id', me.id).eq('read', false),
+    sb.from('klipp_messages').select('*', { count: 'exact', head: true }).eq('recipient_id', me.id).is('read_at', null)
+  ]);
+  unread = { n: n.count || 0, m: m.count || 0 };
+  paintBadges();
 }
 
 function cleanup(){
   if (activeIO){activeIO.disconnect();activeIO=null}
-  closeSheet(); closeViewer();
+  clearInterval(msgTimer); closeSheet(); closeViewer();
   $$('#view video').forEach(v => v.pause());
 }
 
@@ -276,6 +366,11 @@ async function route(){
   renderNav();
   if (h.startsWith('#/u/')) return viewProfile(decodeURIComponent(h.slice(4)));
   if (h === '#/upload') return viewUpload();
+  if (h.startsWith('#/search')) return viewSearch();
+  if (h.startsWith('#/tag/')) return viewTag(decodeURIComponent(h.slice(6)));
+  if (h === '#/inbox') return viewInbox();
+  if (h === '#/messages') return viewMessages();
+  if (h.startsWith('#/messages/')) return viewThread(decodeURIComponent(h.slice(11)));
   if (h === '#/auth') return viewAuth();
   if (h === '#/me') { if (!me) return needAuth(); if (!myProfile) { view.innerHTML='<div class="spin"></div>'; await loadMe(); } if (!myProfile) { view.innerHTML = `<div class="empty"><div><h2>Dein Profil fehlt noch</h2><p class="muted">Du bist angemeldet, aber für dein Konto wurde kein Profil angelegt. Führe <b>fix-profile.sql</b> im Supabase SQL Editor aus und lade die Seite neu.</p><button class="btn" data-act="logout">Abmelden</button></div></div>`; return; } return location.replace('#/u/' + myProfile.username); }
   return viewFeed();
@@ -305,6 +400,11 @@ function followBtn(uid){
   return `<button class="follow ${followingSet.has(uid) ? 'on' : ''}" data-act="follow" data-uid="${uid}">${followingSet.has(uid) ? 'Gefolgt' : 'Folgen'}</button>`;
 }
 
+function capHTML(t){
+  return String(t || '').split(/(#[\p{L}\p{N}_]{1,40})/u).map(p =>
+    /^#[\p{L}\p{N}_]+$/u.test(p) ? `<a class="tag" href="#/tag/${encodeURIComponent(p.slice(1).toLowerCase())}">${esc(p)}</a>` : esc(p)
+  ).join('');
+}
 function clipHTML(v){
   const p = v.profiles || {};
   const own = me && me.id === v.user_id;
@@ -318,11 +418,12 @@ function clipHTML(v){
           <a class="un" href="#/u/${esc(p.username)}">@${esc(p.username)}</a>
           ${followBtn(v.user_id)}
         </div>
-        ${v.caption ? `<p class="cap">${esc(v.caption)}</p>` : ''}
+        ${v.caption ? `<p class="cap">${capHTML(v.caption)}</p>` : ''}
       </div>
       <div class="rail-actions">
         <button data-act="like" class="${likedSet.has(v.id) ? 'on' : ''}" aria-label="Gefällt mir"><span class="ring">${svg('heart')}</span><span class="n">${fmt(v.likeCount)}</span></button>
         <button data-act="comment" aria-label="Kommentare"><span class="ring">${svg('comment')}</span><span class="cn">${fmt(v.commentCount)}</span></button>
+        <button data-act="save" class="${savedSet.has(v.id) ? 'on' : ''}" aria-label="Zu Favoriten"><span class="ring">${svg('bookmark')}</span><span>Merken</span></button>
         <button data-act="share" aria-label="Teilen"><span class="ring">${svg('share')}</span><span>Teilen</span></button>
         ${own ? `<button data-act="delete" aria-label="Löschen"><span class="ring">${svg('trash')}</span><span>Löschen</span></button>` : ''}
       </div>
@@ -425,6 +526,18 @@ async function toggleLike(v){
     v.likeCount += on ? -1 : 1; paintLike(v); toast('Like konnte nicht gespeichert werden.');
   }
 }
+function paintSave(v){ $$(`.clip[data-id="${v.id}"] [data-act="save"]`).forEach(b => b.classList.toggle('on', savedSet.has(v.id))); }
+async function toggleSave(v){
+  if (!me) return needAuth();
+  const on = !savedSet.has(v.id);
+  on ? savedSet.add(v.id) : savedSet.delete(v.id); paintSave(v);
+  const { error } = on
+    ? await sb.from('klipp_bookmarks').insert({ user_id: me.id, video_id: v.id })
+    : await sb.from('klipp_bookmarks').delete().match({ user_id: me.id, video_id: v.id });
+  if (error){ on ? savedSet.delete(v.id) : savedSet.add(v.id); paintSave(v); return toast('Speichern nicht möglich. Hast du features.sql ausgeführt?'); }
+  pState.saved = null;
+  toast(on ? 'Zu Favoriten hinzugefügt' : 'Aus Favoriten entfernt');
+}
 async function toggleFollow(uid){
   if (!me) return needAuth();
   if (uid === me.id) return;
@@ -521,6 +634,12 @@ document.addEventListener('click', async e => {
     else { vid.pause(); frame.classList.add('paused'); }
   }
   else if (act === 'like' && v) toggleLike(v);
+  else if (act === 'save' && v) toggleSave(v);
+  else if (act === 'open-video'){
+    const { data } = await sb.from('klipp_videos').select(SEL).eq('id', btn.dataset.vid).maybeSingle();
+    if (!data) return toast('Dieses Video gibt es nicht mehr.');
+    const [vv] = await enrich([data]); openViewer([vv], 0);
+  }
   else if (act === 'comment' && v) openComments(v);
   else if (act === 'share' && v) shareVideo(v);
   else if (act === 'delete' && v) deleteVideo(v);
@@ -538,7 +657,17 @@ document.addEventListener('click', async e => {
     if (sheetVideo) bumpComments(sheetVideo, -1);
   }
   else if (act === 'close-viewer'){ closeViewer(); }
-  else if (act === 'logout'){ await sb.auth.signOut(); toast('Abgemeldet'); }
+  else if (act === 'logout'){ $('#modal').classList.remove('open'); await sb.auth.signOut(); toast('Abgemeldet'); }
+  else if (act === 'settings') openSettings();
+  else if (act === 'ptab'){ pState.tab = btn.dataset.t; renderProfileGrid(); }
+  else if (act === 'psort'){ pState.sort = btn.dataset.s; renderProfileGrid(); }
+  else if (act === 'share-profile'){
+    const url = location.href.split('#')[0].split('?')[0] + '#/u/' + btn.dataset.user;
+    try {
+      if (navigator.share) await navigator.share({ title: 'Klipp', url });
+      else { await navigator.clipboard.writeText(url); toast('Profil-Link kopiert'); }
+    } catch (e) { if (e.name !== 'AbortError') toast(url); }
+  }
   else if (act === 'edit-profile') openEditProfile();
   else if (act === 'close-modal') $('#modal').classList.remove('open');
 });
@@ -552,6 +681,8 @@ document.addEventListener('dblclick', e => {
 /* =========================================================
    Profil
    ========================================================= */
+let pState = { p: null, vids: [], liked: null, tab: 'videos', sort: 'new', own: false };
+
 async function viewProfile(username){
   view.innerHTML = '<div class="page"><div class="spin"></div></div>';
   const { data: p } = await sb.from('klipp_profiles').select('*').eq('username', username).maybeSingle();
@@ -562,33 +693,105 @@ async function viewProfile(username){
     sb.from('klipp_follows').select('*', { count: 'exact', head: true }).eq('follower_id', p.id)
   ]);
   const vids = await enrich(vr.data);
-  const own = me && me.id === p.id;
-  view.innerHTML = `<div class="page">
-    <div class="phead">
-      ${avatar(p, 104)}
-      <div class="pinfo">
-        <h1>@${esc(p.username)}</h1>
-        <div class="stats">
-          <div><b>${vids.length}</b><span>Videos</span></div>
-          <div><b id="fcount" data-uid="${p.id}" data-n="${fers.count || 0}">${fmt(fers.count || 0)}</b><span>Follower</span></div>
-          <div><b>${fmt(fing.count || 0)}</b><span>Folge ich</span></div>
+  const own = !!(me && me.id === p.id);
+  pState = { p, vids, liked: null, saved: null, tab: 'videos', sort: 'new', own, list: vids };
+  const totalLikes = vids.reduce((n, v) => n + v.likeCount, 0);
+  const shareBtn = `<button class="ic-btn" data-act="share-profile" data-user="${esc(p.username)}" aria-label="Profil teilen">${svg('share')}</button>`;
+  view.innerHTML = `<div class="page"><div class="pwide">
+    <div class="ph2">
+      ${avatar(p, 150)}
+      <div class="pinfo2">
+        <div class="pname"><h1>${esc(p.display_name || p.username)}</h1><span class="sep"></span><span class="uname">${esc(p.username)}</span></div>
+        <div class="pstats">
+          <span><b>${fmt(fing.count || 0)}</b>Gefolgt</span>
+          <span><b id="fcount" data-uid="${p.id}" data-n="${fers.count || 0}">${fmt(fers.count || 0)}</b>Follower</span>
+          <span><b>${fmt(totalLikes)}</b>Likes</span>
+        </div>
+        <div class="pbtns">
+          ${own ? `<button class="btn ghost" data-act="edit-profile">Profil bearbeiten</button><button class="ic-btn" data-act="settings" aria-label="Einstellungen">${svg('gear')}</button>${shareBtn}`
+                : `<button class="btn follow-main ${followingSet.has(p.id) ? 'on' : ''}" data-act="follow" data-uid="${p.id}">${followingSet.has(p.id) ? 'Gefolgt' : 'Folgen'}</button><a class="btn ghost" href="#/messages/${esc(p.username)}">Nachricht</a>${shareBtn}`}
         </div>
         ${p.bio ? `<p class="bio">${esc(p.bio)}</p>` : ''}
-        <div class="pbtns">
-          ${own ? `<button class="btn ghost small" data-act="edit-profile">Profil bearbeiten</button><button class="btn ghost small" data-act="logout">Abmelden</button>`
-                : `<button class="btn small follow-main ${followingSet.has(p.id) ? 'on' : ''}" data-act="follow" data-uid="${p.id}">${followingSet.has(p.id) ? 'Gefolgt' : 'Folgen'}</button>`}
-        </div>
       </div>
     </div>
-    ${vids.length ? `<div class="grid">${vids.map((v, i) => `
-      <button class="thumb" data-i="${i}" aria-label="Video ansehen">
-        <video src="${esc(v.video_url)}#t=0.3" preload="metadata" muted playsinline></video>
-        <span><svg class="i" viewBox="0 0 24 24">${IC.heart}</svg>${fmt(v.likeCount)}</span>
-      </button>`).join('')}</div>`
-    : `<div class="muted" style="text-align:center;padding:40px 0">${own ? 'Du hast noch nichts hochgeladen.' : 'Noch keine Videos.'}${own ? '<br><a class="btn" style="margin-top:16px" href="#/upload">Erstes Video hochladen</a>' : ''}</div>`}
-  </div>`;
-  $$('.thumb', view).forEach(t => t.addEventListener('click', () => openViewer(vids, +t.dataset.i)));
+    <div class="ptabs">
+      <div class="tabs2">
+        <button data-act="ptab" data-t="videos">${svg('film')}Videos</button>
+        ${own ? `<button data-act="ptab" data-t="saved">${svg('bookmark')}Favoriten</button><button data-act="ptab" data-t="liked">${svg('heart')}Gelikt</button>` : ''}
+      </div>
+      <div class="chips" id="chips">
+        <button data-act="psort" data-s="new">Aktuelles</button>
+        <button data-act="psort" data-s="top">Beliebt</button>
+        <button data-act="psort" data-s="old">Älteste</button>
+      </div>
+    </div>
+    <div id="pgrid"></div>
+  </div></div>`;
+  renderProfileGrid();
 }
+
+async function loadVideosFrom(table, uid){
+  const { data: l } = await sb.from(table).select('video_id').eq('user_id', uid).order('created_at', { ascending: false }).limit(60);
+  const ids = (l || []).map(x => x.video_id);
+  if (!ids.length) return [];
+  const { data } = await sb.from('klipp_videos').select(SEL).in('id', ids);
+  const vids = await enrich(data);
+  const order = new Map(ids.map((id, i) => [id, i]));
+  return vids.sort((a, b) => order.get(a.id) - order.get(b.id));
+}
+const loadLikedVideos = uid => loadVideosFrom('klipp_likes', uid);
+
+async function renderProfileGrid(){
+  const st = pState;
+  $$('.tabs2 button').forEach(b => b.classList.toggle('on', b.dataset.t === st.tab));
+  const chips = $('#chips'); if (!chips) return;
+  chips.style.display = st.tab === 'videos' ? '' : 'none';
+  $$('#chips button').forEach(b => b.classList.toggle('on', b.dataset.s === st.sort));
+  let list;
+  if (st.tab === 'liked'){
+    if (!st.liked){
+      $('#pgrid').innerHTML = '<div class="spin"></div>';
+      st.liked = await loadLikedVideos(st.p.id);
+    }
+    list = st.liked;
+  } else if (st.tab === 'saved'){
+    if (!st.saved){
+      $('#pgrid').innerHTML = '<div class="spin"></div>';
+      st.saved = await loadVideosFrom('klipp_bookmarks', st.p.id);
+    }
+    list = st.saved;
+  } else {
+    list = [...st.vids];
+    if (st.sort === 'top') list.sort((a, b) => b.likeCount - a.likeCount);
+    else if (st.sort === 'old') list.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  }
+  const g = $('#pgrid'); if (!g || st !== pState) return;   // Seite wurde inzwischen gewechselt
+  st.list = list;
+  if (!list.length){
+    g.innerHTML = st.tab === 'liked' ? '<div class="msg">Du hast noch keine Videos geliked.</div>'
+      : st.tab === 'saved' ? '<div class="msg">Noch keine Favoriten. Tippe bei einem Video auf „Merken“.</div>'
+      : `<div class="msg">${st.own ? 'Du hast noch nichts hochgeladen.' : 'Noch keine Videos.'}${st.own ? '<br><a class="btn" href="#/upload">Erstes Video hochladen</a>' : ''}</div>`;
+    return;
+  }
+  g.innerHTML = `<div class="grid">${list.map((v, i) => `
+    <button class="thumb" data-i="${i}" aria-label="Video ansehen">
+      <video src="${esc(v.video_url)}#t=0.3" preload="metadata" muted playsinline></video>
+      <span><svg class="i" viewBox="0 0 24 24">${IC.heart}</svg>${fmt(v.likeCount)}</span>
+    </button>`).join('')}</div>`;
+  $$('.thumb', g).forEach(t => t.addEventListener('click', () => openViewer(st.list, +t.dataset.i)));
+}
+
+function openSettings(){
+  const m = $('#modal');
+  m.innerHTML = `<div class="card"><h2>Einstellungen</h2>
+    <div class="mlist">
+      <button class="btn ghost" data-act="edit-profile">Profil bearbeiten</button>
+      <button class="btn ghost" data-act="logout">Abmelden</button>
+      <button class="btn ghost" data-act="close-modal">Schließen</button>
+    </div></div>`;
+  m.classList.add('open');
+}
+
 /* Follow-Button auf Profil: Style wie Button, nicht wie Overlay-Pille */
 const st = document.createElement('style');
 st.textContent = '.follow-main{background:var(--accent)}.follow-main.on{background:var(--panel2);color:var(--text)}';
@@ -612,6 +815,7 @@ function openEditProfile(){
   m.innerHTML = `<div class="card">
     <h2>Profil bearbeiten</h2>
     <form id="pform">
+      <div class="field"><label for="pdn">Anzeigename</label><input id="pdn" maxlength="30" placeholder="z. B. Klipp Studios" value="${esc(myProfile?.display_name || '')}"></div>
       <div class="field"><label for="pav">Profilbild</label><input type="file" id="pav" accept="image/jpeg,image/png,image/webp"></div>
       <div class="field"><label for="pbio">Bio</label><textarea id="pbio" maxlength="160" placeholder="Erzähl kurz etwas über dich">${esc(myProfile?.bio || '')}</textarea></div>
       <div class="err" id="perr"></div>
@@ -624,7 +828,7 @@ function openEditProfile(){
   $('#pform').addEventListener('submit', async e => {
     e.preventDefault();
     const btn = $('#psave'); btn.disabled = true; btn.textContent = 'Speichern …';
-    const upd = { bio: $('#pbio').value.trim() };
+    const upd = { bio: $('#pbio').value.trim(), display_name: $('#pdn').value.trim() || null };
     const f = $('#pav').files[0];
     if (f){
       if (f.size > 5 * 1024 * 1024){ $('#perr').textContent = 'Das Bild darf höchstens 5 MB groß sein.'; btn.disabled = false; btn.textContent = 'Speichern'; return; }
@@ -635,7 +839,7 @@ function openEditProfile(){
       upd.avatar_url = sb.storage.from('klipp-avatars').getPublicUrl(path).data.publicUrl;
     }
     const { error } = await sb.from('klipp_profiles').update(upd).eq('id', me.id);
-    if (error){ $('#perr').textContent = error.message; btn.disabled = false; btn.textContent = 'Speichern'; return; }
+    if (error){ $('#perr').textContent = /display_name/.test(error.message) ? 'Führe zuerst profile-upgrade.sql im Supabase SQL Editor aus.' : error.message; btn.disabled = false; btn.textContent = 'Speichern'; return; }
     m.classList.remove('open'); await loadMe(); toast('Profil gespeichert'); route();
   });
 }
@@ -652,7 +856,7 @@ function viewUpload(){
       <label class="drop" id="drop">${svg('film')}<b id="dname">Video auswählen</b><span>Tippen oder Datei hierher ziehen</span>
         <input type="file" id="ufile" accept="video/mp4,video/webm,video/quicktime"></label>
       <video id="uprev" class="preview" controls playsinline hidden></video>
-      <div class="field"><label for="ucap">Beschreibung</label><textarea id="ucap" maxlength="150" placeholder="Worum geht’s in deinem Video?"></textarea></div>
+      <div class="field"><label for="ucap">Beschreibung</label><textarea id="ucap" maxlength="150" placeholder="Worum geht’s? Tipp: #hashtags"></textarea></div>
       <div class="err" id="uerr"></div>
       <button class="btn" id="ubtn" style="width:100%" disabled>Veröffentlichen</button>
     </form></div></div>`;
@@ -744,6 +948,191 @@ function authError(m){
   return m;
 }
 
+
+/* =========================================================
+   Suche, Hashtags, Mitteilungen, Nachrichten
+   ========================================================= */
+const likeSafe = t => String(t).replace(/[%,()*\\]/g, ' ').trim();
+const escRe = t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const hhmm = d => new Date(d).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+
+function authGate(msg){
+  view.innerHTML = `<div class="empty"><div><h2>Bitte anmelden</h2><p class="muted">${esc(msg)}</p><a class="btn" href="#/auth">Anmelden</a></div></div>`;
+}
+function thumbGrid(el, list){
+  if (!list.length){ el.innerHTML = '<div class="msg">Keine Videos gefunden.</div>'; return; }
+  el.innerHTML = `<div class="grid">${list.map((v, i) => `
+    <button class="thumb" data-i="${i}" aria-label="Video ansehen">
+      <video src="${esc(v.video_url)}#t=0.3" preload="metadata" muted playsinline></video>
+      <span><svg class="i" viewBox="0 0 24 24">${IC.heart}</svg>${fmt(v.likeCount)}</span>
+    </button>`).join('')}</div>`;
+  $$('.thumb', el).forEach(t => t.addEventListener('click', () => openViewer(list, +t.dataset.i)));
+}
+
+/* ---------- Suche ---------- */
+function viewSearch(){
+  view.innerHTML = `<div class="page"><div class="pwide narrow2">
+    <h1>Suche</h1>
+    <input id="sq" class="sinput" placeholder="Nutzer, Videos oder #hashtags" autocomplete="off">
+    <div class="chips smode" style="margin:16px 0"><button data-sm="users">Nutzer</button><button data-sm="videos">Videos</button></div>
+    <div id="sres"></div></div></div>`;
+  const input = $('#sq');
+  const paintMode = () => $$('.smode button').forEach(b => b.classList.toggle('on', b.dataset.sm === sMode));
+  const run = () => runSearch(input.value);
+  paintMode(); run();
+  input.addEventListener('input', () => { clearTimeout(sTimer); sTimer = setTimeout(run, 300); });
+  $$('.smode button').forEach(b => b.addEventListener('click', () => { sMode = b.dataset.sm; paintMode(); run(); }));
+}
+async function runSearch(raw){
+  const box = $('#sres'); if (!box) return;
+  const q = likeSafe(raw);
+  const stale = () => !$('#sq') || $('#sq').value !== raw;
+  if (!q){
+    const { data } = await sb.from('klipp_videos').select('caption').order('created_at', { ascending: false }).limit(150);
+    if (stale()) return;
+    const counts = new Map();
+    (data || []).forEach(r => (String(r.caption).match(/#[\p{L}\p{N}_]{1,40}/gu) || []).forEach(t => { t = t.toLowerCase(); counts.set(t, (counts.get(t) || 0) + 1); }));
+    const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14);
+    box.innerHTML = top.length
+      ? `<p class="muted" style="margin-bottom:10px">Beliebte Hashtags</p><div class="tagchips">${top.map(([t, n]) => `<a href="#/tag/${encodeURIComponent(t.slice(1))}">${esc(t)}<small>${n}</small></a>`).join('')}</div>`
+      : '<div class="msg">Such nach Nutzern, Videos oder #hashtags.</div>';
+    return;
+  }
+  box.innerHTML = '<div class="spin"></div>';
+  if (q.startsWith('#') && q.length > 1){ location.hash = '#/tag/' + encodeURIComponent(q.slice(1).toLowerCase()); return; }
+  if (sMode === 'users'){
+    const term = q.replace(/^@/, '');
+    const { data, error } = await sb.from('klipp_profiles').select('id,username,display_name,avatar_url').or(`username.ilike.%${term}%,display_name.ilike.%${term}%`).limit(30);
+    if (stale()) return;
+    if (error) { box.innerHTML = `<div class="msg">${esc(error.message)}</div>`; return; }
+    box.innerHTML = data.length ? data.map(p => `
+      <a class="row" href="#/u/${esc(p.username)}">${avatar(p, 48)}
+        <div class="t"><b>${esc(p.display_name || p.username)}</b><p>@${esc(p.username)}</p></div></a>`).join('')
+      : '<div class="msg">Keine Nutzer gefunden.</div>';
+  } else {
+    const { data, error } = await sb.from('klipp_videos').select(SEL).ilike('caption', `%${q}%`).order('created_at', { ascending: false }).limit(40);
+    if (stale()) return;
+    if (error) { box.innerHTML = `<div class="msg">${esc(error.message)}</div>`; return; }
+    thumbGrid(box, await enrich(data));
+  }
+}
+
+/* ---------- Hashtag-Seite ---------- */
+async function viewTag(tag){
+  tag = tag.toLowerCase();
+  view.innerHTML = `<div class="page"><div class="pwide">
+    <h1>#${esc(tag)}</h1><p class="muted" id="tcount" style="margin:6px 0 22px"></p>
+    <div id="tgrid"><div class="spin"></div></div></div></div>`;
+  const { data, error } = await sb.from('klipp_videos').select(SEL).ilike('caption', `%#${likeSafe(tag)}%`).order('created_at', { ascending: false }).limit(80);
+  if (!$('#tgrid')) return;
+  if (error){ $('#tgrid').innerHTML = `<div class="msg">${esc(error.message)}</div>`; return; }
+  const re = new RegExp('#' + escRe(tag) + '(?![\\p{L}\\p{N}_])', 'iu');
+  const vids = await enrich(data.filter(r => re.test(r.caption)));
+  $('#tcount').textContent = vids.length === 1 ? '1 Video' : `${vids.length} Videos`;
+  thumbGrid($('#tgrid'), vids);
+}
+
+/* ---------- Mitteilungen ---------- */
+async function viewInbox(){
+  if (!me) return authGate('Melde dich an, um deine Mitteilungen zu sehen.');
+  view.innerHTML = '<div class="page"><div class="pwide narrow2"><h1>Mitteilungen</h1><div id="nlist" style="margin-top:18px"><div class="spin"></div></div></div></div>';
+  const { data, error } = await sb.from('klipp_notifications')
+    .select('id,type,video_id,body,read,created_at,actor:klipp_profiles!klipp_notifications_actor_id_fkey(username,avatar_url)')
+    .eq('user_id', me.id).order('created_at', { ascending: false }).limit(60);
+  const box = $('#nlist'); if (!box) return;
+  if (error){ box.innerHTML = `<div class="msg">${esc(error.message)}<br>Hast du features.sql ausgeführt?</div>`; return; }
+  if (!data.length){ box.innerHTML = '<div class="msg">Noch keine Mitteilungen. Sobald jemand dein Video liked, kommentiert oder dir folgt, siehst du es hier.</div>'; return; }
+  const text = { like: 'hat dein Video geliked', comment: 'hat dein Video kommentiert', follow: 'folgt dir jetzt' };
+  box.innerHTML = data.map(n => {
+    const a = n.actor || {};
+    const inner = `${avatar(a, 46)}<div class="t"><b>@${esc(a.username)}</b> ${text[n.type]}${n.body ? `<p>„${esc(n.body)}“</p>` : ''}</div><span class="when">${ago(n.created_at)}</span>${n.read ? '' : '<span class="dot"></span>'}`;
+    return n.type === 'follow'
+      ? `<a class="row ${n.read ? '' : 'unread'}" href="#/u/${esc(a.username)}">${inner}</a>`
+      : `<button class="row ${n.read ? '' : 'unread'}" data-act="open-video" data-vid="${n.video_id}">${inner}</button>`;
+  }).join('');
+  if (data.some(n => !n.read)){
+    await sb.from('klipp_notifications').update({ read: true }).eq('user_id', me.id).eq('read', false);
+    unread.n = 0; paintBadges();
+  }
+}
+
+/* ---------- Nachrichten: Liste ---------- */
+async function viewMessages(){
+  if (!me) return authGate('Melde dich an, um Nachrichten zu schreiben.');
+  view.innerHTML = `<div class="page"><div class="pwide narrow2"><h1>Nachrichten</h1>
+    <form id="nform" class="sbar"><input id="nname" placeholder="Neue Nachricht an Nutzername …" autocomplete="off"><button class="btn small">Los</button></form>
+    <div id="mlist"><div class="spin"></div></div></div></div>`;
+  $('#nform').addEventListener('submit', e => {
+    e.preventDefault();
+    const n = $('#nname').value.trim().replace(/^@/, '').toLowerCase();
+    if (n) location.hash = '#/messages/' + encodeURIComponent(n);
+  });
+  const { data, error } = await sb.from('klipp_messages').select('id,sender_id,recipient_id,body,read_at,created_at')
+    .or(`sender_id.eq.${me.id},recipient_id.eq.${me.id}`).order('created_at', { ascending: false }).limit(300);
+  const box = $('#mlist'); if (!box) return;
+  if (error){ box.innerHTML = `<div class="msg">${esc(error.message)}<br>Hast du features.sql ausgeführt?</div>`; return; }
+  const conv = new Map();
+  data.forEach(m => {
+    const other = m.sender_id === me.id ? m.recipient_id : m.sender_id;
+    if (!conv.has(other)) conv.set(other, { last: m, unread: 0 });
+    if (m.recipient_id === me.id && !m.read_at) conv.get(other).unread++;
+  });
+  if (!conv.size){ box.innerHTML = '<div class="msg">Noch keine Nachrichten. Gib oben einen Nutzernamen ein oder öffne ein Profil und tippe auf „Nachricht“.</div>'; return; }
+  const { data: profs } = await sb.from('klipp_profiles').select('id,username,display_name,avatar_url').in('id', [...conv.keys()]);
+  const pm = new Map((profs || []).map(p => [p.id, p]));
+  box.innerHTML = [...conv.entries()].map(([id, c]) => {
+    const p = pm.get(id) || {};
+    return `<a class="row ${c.unread ? 'unread' : ''}" href="#/messages/${esc(p.username)}">${avatar(p, 48)}
+      <div class="t"><b>${esc(p.display_name || p.username)}</b><p>${c.last.sender_id === me.id ? 'Du: ' : ''}${esc(c.last.body)}</p></div>
+      <span class="when">${ago(c.last.created_at)}</span>${c.unread ? `<i class="badge" style="margin-left:0">${c.unread}</i>` : ''}</a>`;
+  }).join('');
+}
+
+/* ---------- Nachrichten: Chat ---------- */
+async function viewThread(username){
+  if (!me) return authGate('Melde dich an, um Nachrichten zu schreiben.');
+  const { data: p } = await sb.from('klipp_profiles').select('id,username,display_name,avatar_url').eq('username', username.toLowerCase()).maybeSingle();
+  if (!p){ view.innerHTML = `<div class="empty"><div><h2>Nutzer nicht gefunden</h2><p class="muted">@${esc(username)} gibt es nicht.</p><a class="btn" href="#/messages">Zurück</a></div></div>`; return; }
+  if (p.id === me.id){ location.replace('#/messages'); return; }
+  view.innerHTML = `<div class="chat">
+    <div class="chath"><a class="ic-btn" href="#/messages" aria-label="Zurück">${svg('back')}</a>
+      <a href="#/u/${esc(p.username)}" style="display:flex;align-items:center;gap:10px">${avatar(p, 38)}<b>${esc(p.display_name || p.username)}</b></a></div>
+    <div class="bubbles" id="bubbles"><div class="spin"></div></div>
+    <form id="mform"><input id="minput" maxlength="1000" placeholder="Nachricht schreiben …" autocomplete="off"><button class="btn small">Senden</button></form>
+  </div>`;
+  let msgs = [], lastKey = '', first = true;
+  const draw = () => {
+    const el = $('#bubbles'); if (!el) return;
+    const atBottom = first || el.scrollHeight - el.scrollTop - el.clientHeight < 90;
+    el.innerHTML = msgs.length
+      ? msgs.map(m => `<div class="bub ${m.sender_id === me.id ? 'me' : ''}">${esc(m.body)}<small>${hhmm(m.created_at)}</small></div>`).join('')
+      : `<div class="msg">Schreib die erste Nachricht an @${esc(p.username)}.</div>`;
+    if (atBottom) el.scrollTop = el.scrollHeight;
+    first = false;
+  };
+  const load = async () => {
+    if (!$('#bubbles')){ clearInterval(msgTimer); return; }
+    const { data, error } = await sb.from('klipp_messages').select('id,sender_id,recipient_id,body,read_at,created_at')
+      .or(`and(sender_id.eq.${me.id},recipient_id.eq.${p.id}),and(sender_id.eq.${p.id},recipient_id.eq.${me.id})`)
+      .order('created_at', { ascending: true }).limit(200);
+    if (error){ if (first) $('#bubbles').innerHTML = `<div class="msg">${esc(error.message)}<br>Hast du features.sql ausgeführt?</div>`; return; }
+    const key = (data.length ? data[data.length - 1].id : '') + ':' + data.length;
+    if (key !== lastKey || first){ lastKey = key; msgs = data; draw(); }
+    if (data.some(m => m.sender_id === p.id && !m.read_at)){ await sb.rpc('klipp_mark_read', { other_id: p.id }); refreshBadges(); }
+  };
+  await load();
+  clearInterval(msgTimer); msgTimer = setInterval(load, 5000);
+  $('#mform').addEventListener('submit', async e => {
+    e.preventDefault();
+    const input = $('#minput'), body = input.value.trim();
+    if (!body) return;
+    input.value = '';
+    const { data, error } = await sb.from('klipp_messages').insert({ sender_id: me.id, recipient_id: p.id, body }).select('id,sender_id,recipient_id,body,read_at,created_at').single();
+    if (error){ input.value = body; return toast('Nachricht konnte nicht gesendet werden.'); }
+    msgs.push(data); lastKey = data.id + ':' + msgs.length; first = true; draw();
+  });
+}
+
 /* =========================================================
    Start
    ========================================================= */
@@ -753,12 +1142,13 @@ function authError(m){
   me = data.session?.user || null;
   let lastUid = me?.id || null;
   await loadMe();
+  refreshBadges(); setInterval(refreshBadges, 30000);
   sb.auth.onAuthStateChange((ev, session) => {
     const uid = session?.user?.id || null;
     if (uid === lastUid) return;
     lastUid = uid; me = session?.user || null;
     setTimeout(async () => {
-      await loadMe();
+      await loadMe(); refreshBadges();
       if (location.hash === '#/auth') location.hash = '#/'; else route();
     }, 0);
   });
